@@ -52,12 +52,14 @@ class MyHomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Card(color: Colors.blue, elevation: 5, child: const Text('Gráfico')),
-          TransactionUser(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Card(color: Colors.blue, elevation: 5, child: const Text('Gráfico')),
+            TransactionUser(),
+          ],
+        ),
       ),
     );
   }
