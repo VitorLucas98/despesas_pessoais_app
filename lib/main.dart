@@ -12,7 +12,30 @@ class ExpensesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: MyHomePage());
+    return MaterialApp(
+      home: MyHomePage(),
+      theme: ThemeData(
+        primaryColor: Colors.purple,
+        useMaterial3: false,
+        fontFamily: 'OpenSans',
+        textTheme: ThemeData.light().textTheme.copyWith(
+              titleLarge: const TextStyle(
+                fontFamily: 'OpenSans',
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.purple,
+          foregroundColor: Colors.white,
+        ),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.amber,
+          primary: Colors.purple,
+          secondary: Colors.amber,
+        ),
+      ),
+    );
   }
 }
 
@@ -27,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final tituloController = TextEditingController();
 
   final valorController = TextEditingController();
-  final _transactions = [
+  final List<Transaction>_transactions = [
     Transaction(
       id: 't1',
       title: 'Novo Tênis de Corrida',
@@ -53,6 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _transactions.add(transaction);
     });
+
+    Navigator.of(context).pop(); // Fecha o modal após adicionar a transação
   }
 
   _openTransactionForm(BuildContext context) {
@@ -71,12 +96,11 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(
           'Despesas Pessoais',
           style: TextStyle(
-            fontFamily: 'OpenSans',
+            fontFamily: 'Quicksand',
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Color(0xFF6A1B9A), // Cor hexadecimal
         centerTitle: true,
         actions: [
           Padding(
@@ -89,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 shape: BoxShape.circle,
               ),
               child: IconButton(
-                icon: Icon(Icons.add, color: Colors.purple), // Cor do ícone
+                icon: Icon(Icons.add, color:Theme.of(context).primaryColor), // Cor do ícone
                 onPressed: () => _openTransactionForm(context),
               ),
             ),
@@ -110,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add, color: Colors.white), // Cor do ícone
+        child: Icon(Icons.add, color: Colors.white), // Cor do ícone
         backgroundColor: Color(0xFF6A1B9A), // Cor hexadecimal
         onPressed: () => _openTransactionForm(context),
       ),
