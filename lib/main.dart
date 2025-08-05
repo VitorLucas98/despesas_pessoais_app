@@ -51,43 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final tituloController = TextEditingController();
 
   final valorController = TextEditingController();
-  final List<Transaction>_transactions = [
-    Transaction(
-      id: 't0',
-      title: 'Conta Antiga',
-      value: 400.00,
-      date: DateTime.now().subtract(const Duration(days: 2)),
-    ),
-    Transaction(
-      id: 't1',
-      title: 'Novo Tênis de Corrida',
-      value: 310.76,
-      date: DateTime.now().subtract(const Duration(days: 3)),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Conta de Luz',
-      value: 211.30,
-      date: DateTime.now().subtract(const Duration(days: 4)),
-    ),    Transaction(
-      id: 't3',
-      title: 'Conta de Agua',
-      value: 93.60,
-      date: DateTime.now().subtract(const Duration(days: 4)),
-    ),
-    Transaction(
-      id: 't4',
-      title: 'Novo Celular',
-      value: 2000.00,
-      date: DateTime.now().subtract(const Duration(days: 5)),
-    ),
-    Transaction(
-      id: 't5',
-      title: 'Cinema',
-      value: 150.00,
-      date: DateTime.now().subtract(const Duration(days: 6)),
-    ),  
-  ];
+  final List<Transaction>_transactions = [];
 
   List<Transaction> get _recentTransactions {
     // Filtra as transações para incluir apenas aquelas dos últimos 7 dias
@@ -98,12 +62,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  _addTransaction(String title, double value) {
+  _addTransaction(String title, double value, DateTime date) {
     final transaction = Transaction(
       id: Random().nextDouble().toString(),
       title: title,
       value: value,
-      date: DateTime.now(),
+      date: date,
     );
 
     setState(() {
