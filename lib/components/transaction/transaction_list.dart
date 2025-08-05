@@ -37,45 +37,32 @@ class TransactionList extends StatelessWidget {
                 itemBuilder: (ctx, index) {
                   final tr = transactions[index];
                   return Card(
-                    child: Row(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.purple, width: 2),
-                          ),
-                          padding: EdgeInsets.all(10),
-                          child: Text(
-                            _formatCurrency(tr.value),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Colors.purple,
+                    elevation: 5,
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 5,
+                    ),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.purple,
+                        radius: 30,
+                        child: Padding(
+                          padding: const EdgeInsets.all(6),
+                          child: FittedBox(
+                            child: Text(
+                              _formatCurrency(tr.value),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              tr.title,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              DateFormat(
-                                'dd/MM/yyyy HH:mm',
-                              ).format(tr.date.subtract(Duration(hours: 3))),
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ],
+                      ),
+                      title: Text(
+                        tr.title,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      subtitle: Text(
+                        DateFormat('d MMM y').format(tr.date),
+                      ),
                     ),
                   );
                 },
