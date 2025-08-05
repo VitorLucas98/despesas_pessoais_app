@@ -1,7 +1,8 @@
 import 'dart:math';
 
-import 'package:despesas_pessoais_app/components/transaction_form.dart';
-import 'package:despesas_pessoais_app/components/transaction_list.dart';
+import 'package:despesas_pessoais_app/components/chart/chart.dart';
+import 'package:despesas_pessoais_app/components/transaction/transaction_form.dart';
+import 'package:despesas_pessoais_app/components/transaction/transaction_list.dart';
 import 'package:despesas_pessoais_app/models/transaction.dart';
 import 'package:flutter/material.dart';
 
@@ -52,18 +53,50 @@ class _MyHomePageState extends State<MyHomePage> {
   final valorController = TextEditingController();
   final List<Transaction>_transactions = [
     Transaction(
+      id: 't0',
+      title: 'Conta Antiga',
+      value: 400.00,
+      date: DateTime.now().subtract(const Duration(days: 2)),
+    ),
+    Transaction(
       id: 't1',
       title: 'Novo Tênis de Corrida',
       value: 310.76,
-      date: DateTime.now(),
+      date: DateTime.now().subtract(const Duration(days: 3)),
     ),
     Transaction(
       id: 't2',
       title: 'Conta de Luz',
       value: 211.30,
-      date: DateTime.now(),
+      date: DateTime.now().subtract(const Duration(days: 4)),
+    ),    Transaction(
+      id: 't3',
+      title: 'Conta de Agua',
+      value: 93.60,
+      date: DateTime.now().subtract(const Duration(days: 4)),
     ),
+    Transaction(
+      id: 't4',
+      title: 'Novo Celular',
+      value: 2000.00,
+      date: DateTime.now().subtract(const Duration(days: 5)),
+    ),
+    Transaction(
+      id: 't5',
+      title: 'Cinema',
+      value: 150.00,
+      date: DateTime.now().subtract(const Duration(days: 6)),
+    ),  
   ];
+
+  List<Transaction> get _recentTransactions {
+    // Filtra as transações para incluir apenas aquelas dos últimos 7 dias
+    return _transactions.where((tr) {
+      return tr.date.isAfter(
+        DateTime.now().subtract(const Duration(days: 7)),
+      );
+    }).toList();
+  }
 
   _addTransaction(String title, double value) {
     final transaction = Transaction(
@@ -124,11 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Card(
-              color: Colors.blue,
-              elevation: 5,
-              child: const Text('Gráfico'),
-            ),
+            Chart(_recentTransactions),
             TransactionList(_transactions),
           ],
         ),
