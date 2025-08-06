@@ -51,7 +51,50 @@ class _MyHomePageState extends State<MyHomePage> {
   final tituloController = TextEditingController();
 
   final valorController = TextEditingController();
-  final List<Transaction>_transactions = [];
+  final List<Transaction>_transactions = [
+    Transaction(
+      id: 't1',
+      title: 'Novo Tênis de Corrida',
+      value: 310.76,
+      date: DateTime.now().subtract(const Duration(days: 3)),
+    ),
+    Transaction(
+      id: 't2',
+      title: 'Conta de Luz',
+      value: 211.59,
+      date: DateTime.now().subtract(const Duration(days: 5)),
+    ),
+    Transaction(
+      id: 't3',
+      title: 'Conta de Água',
+      value: 150.00,
+      date: DateTime.now().subtract(const Duration(days: 7)),
+    ),
+    Transaction(
+      id: 't4',
+      title: 'Novo Celular',
+      value: 1200.00,
+      date: DateTime.now().subtract(const Duration(days: 10)),
+    ),
+    Transaction(
+      id: 't5',
+      title: 'Curso de Flutter',
+      value: 299.99,
+      date: DateTime.now().subtract(const Duration(days: 12)),
+    ),
+    Transaction(
+      id: 't6',
+      title: 'Assinatura Netflix',
+      value: 39.90,
+      date: DateTime.now().subtract(const Duration(days: 15)),
+    ),
+    Transaction(
+      id: 't7',
+      title: 'Jantar no Restaurante',
+      value: 89.90,
+      date: DateTime.now().subtract(const Duration(days: 2)),
+    ),
+  ];
 
   List<Transaction> get _recentTransactions {
     // Filtra as transações para incluir apenas aquelas dos últimos 7 dias
@@ -94,8 +137,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+
+    final appBar = AppBar(
         title: Text(
           'Despesas Pessoais',
           style: TextStyle(
@@ -122,13 +165,24 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ],
-      ),
+      );
+
+      final availableHeight = MediaQuery.of(context).size.height - 
+      appBar.preferredSize.height -
+      MediaQuery.of(context).padding.top;
+
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Chart(_recentTransactions),
-            TransactionList(_transactions, _removeTransaction),
+            SizedBox(
+              height: availableHeight * 0.3,
+              child: Chart(_recentTransactions)),
+            SizedBox(
+              height: availableHeight * 0.7,
+              child: TransactionList(_transactions, _removeTransaction)),
           ],
         ),
       ),
