@@ -20,12 +20,12 @@ class ExpensesApp extends StatelessWidget {
         useMaterial3: false,
         fontFamily: 'OpenSans',
         textTheme: ThemeData.light().textTheme.copyWith(
-              titleLarge: const TextStyle(
-                fontFamily: 'OpenSans',
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          titleLarge: const TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.purple,
           foregroundColor: Colors.white,
@@ -51,57 +51,22 @@ class _MyHomePageState extends State<MyHomePage> {
   final tituloController = TextEditingController();
 
   final valorController = TextEditingController();
-  final List<Transaction>_transactions = [
+
+  bool _showChart = false;
+
+  final List<Transaction> _transactions = [
     Transaction(
       id: 't1',
       title: 'Novo Tênis de Corrida',
       value: 310.76,
       date: DateTime.now().subtract(const Duration(days: 3)),
     ),
-    Transaction(
-      id: 't2',
-      title: 'Conta de Luz',
-      value: 211.59,
-      date: DateTime.now().subtract(const Duration(days: 5)),
-    ),
-    Transaction(
-      id: 't3',
-      title: 'Conta de Água',
-      value: 150.00,
-      date: DateTime.now().subtract(const Duration(days: 7)),
-    ),
-    Transaction(
-      id: 't4',
-      title: 'Novo Celular',
-      value: 1200.00,
-      date: DateTime.now().subtract(const Duration(days: 10)),
-    ),
-    Transaction(
-      id: 't5',
-      title: 'Curso de Flutter',
-      value: 299.99,
-      date: DateTime.now().subtract(const Duration(days: 12)),
-    ),
-    Transaction(
-      id: 't6',
-      title: 'Assinatura Netflix',
-      value: 39.90,
-      date: DateTime.now().subtract(const Duration(days: 15)),
-    ),
-    Transaction(
-      id: 't7',
-      title: 'Jantar no Restaurante',
-      value: 89.90,
-      date: DateTime.now().subtract(const Duration(days: 2)),
-    ),
   ];
 
   List<Transaction> get _recentTransactions {
     // Filtra as transações para incluir apenas aquelas dos últimos 7 dias
     return _transactions.where((tr) {
-      return tr.date.isAfter(
-        DateTime.now().subtract(const Duration(days: 7)),
-      );
+      return tr.date.isAfter(DateTime.now().subtract(const Duration(days: 7)));
     }).toList();
   }
 
@@ -137,39 +102,52 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
     final appBar = AppBar(
-        title: Text(
-          'Despesas Pessoais',
-          style: TextStyle(
-            fontFamily: 'Quicksand',
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+      title: Text(
+        'Despesas Pessoais',
+        style: TextStyle(
+          fontFamily: 'Quicksand',
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
         ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8.0,
-            ), // Espaço para cima e para baixo
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white, // Fundo diferente
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                icon: Icon(Icons.add, color:Theme.of(context).primaryColor), // Cor do ícone
-                onPressed: () => _openTransactionForm(context),
-              ),
+      ),
+      centerTitle: true,
+      actions: [
+        IconButton(
+          icon: _showChart ? Icon(Icons.list) : Icon(Icons.bar_chart),
+          onPressed: () {
+            setState(() {
+              _showChart = !_showChart;
+            });
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          // Espaço para cima e para baixo
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white, // Fundo diferente
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: Icon(
+                Icons.add,
+                color: Theme.of(context).primaryColor,
+              ), // Cor do ícone
+              onPressed: () => _openTransactionForm(context),
             ),
           ),
-        ],
-      );
+        ),
+      ],
+    );
 
-      final availableHeight = MediaQuery.of(context).size.height - 
-      appBar.preferredSize.height -
-      MediaQuery.of(context).padding.top;
+    final availableHeight =
+        MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top;
 
     return Scaffold(
       appBar: appBar,
@@ -177,12 +155,16 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              height: availableHeight * 0.3,
-              child: Chart(_recentTransactions)),
-            SizedBox(
-              height: availableHeight * 0.7,
-              child: TransactionList(_transactions, _removeTransaction)),
+            if (_showChart || !isLandscape)
+              SizedBox(
+                height: availableHeight * (isLandscape ? 0.7 : 0.3),
+                child: Chart(_recentTransactions),
+              ),
+            if (!_showChart || !isLandscape)
+              SizedBox(
+                height: availableHeight * 0.7,
+                child: TransactionList(_transactions, _removeTransaction),
+              ),
           ],
         ),
       ),
